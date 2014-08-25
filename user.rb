@@ -76,7 +76,7 @@ dep 'user exists', :username, :home_dir_base do
   }
   meet {
     sudo "mkdir -p #{home_dir_base}" and
-    sudo "useradd -m -s /bin/bash -b #{home_dir_base} -G admin #{username}" and
+    sudo "useradd -m -s /bin/bash -b #{home_dir_base} -G sudo #{username}" and
     sudo "chmod 701 #{home_dir_base / username}"
   }
 end
