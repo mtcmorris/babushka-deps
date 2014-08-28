@@ -110,12 +110,12 @@ dep 'host updated', :host, :template => 'remote' do
   met? {
     # Make sure we're running on the correct kernel (it should have been installed and booted
     # by the above upgrade; this dep won't attempt an install).
-    remote_babushka 'conversation:kernel running', :version => '3.2.0-43-generic' # linux-3.2.0-43.68, for the CVE-2013-2094 fix.
+    remote_babushka 'mtcmorris:kernel running', :version => '3.2.0-43-generic' # linux-3.2.0-43.68, for the CVE-2013-2094 fix.
   }
 
   meet {
     # First we need to configure apt. This involves a dist-upgrade, which should update the kernel.
-    remote_babushka 'conversation:apt configured'
+    remote_babushka 'mtcmorris:apt configured'
     # The above update could have touched the kernel and/or glibc, so a reboot might be required.
     reboot_remote!
   }
@@ -171,22 +171,22 @@ dep 'host provisioned', :host, :host_name, :ref, :env, :app_name, :app_user, :do
   meet {
     as('root') {
       # First, UTF-8 everything. (A new shell is required to test this, hence 2 runs.)
-      failable_remote_babushka 'conversation:set.locale', :locale_name => 'en_AU'
-      remote_babushka 'conversation:set.locale', :locale_name => 'en_AU'
+      failable_remote_babushka 'mtcmorris:set.locale', :locale_name => 'en_AU'
+      remote_babushka 'mtcmorris:set.locale', :locale_name => 'en_AU'
 
       # Build ruby separately, because it changes the ruby binary for subsequent deps.
-      remote_babushka 'conversation:ruby.src', :version => '2.1.2', :patchlevel => 'p95'
+      remote_babushka 'mtcmorris:ruby.src', :version => '2.1.2', :patchlevel => 'p95'
 
       # All the system-wide config for this app, like packages and user accounts.
-      remote_babushka "conversation:system provisioned", :host_name => host_name, :env => env, :app_name => app_name, :app_user => app_user, :key => keys
+      remote_babushka "mtcmorris:system provisioned", :host_name => host_name, :env => env, :app_name => app_name, :app_user => app_user, :key => keys
     }
 
     as(app_user) {
       # This has to run on a separate login from 'deploy user setup', which requires zsh to already be active.
-      remote_babushka 'conversation:user setup', :key => keys
+      remote_babushka 'mtcmorris:user setup', :key => keys
 
       # Set up the app user for deploys: db user, env vars, and ~/current.
-      remote_babushka 'conversation:deploy user setup', :env => env, :app_name => app_name, :domain => domain
+      remote_babushka 'mtcmorris:deploy user setup', :env => env, :app_name => app_name, :domain => domain
     }
 
     # The initial deploy.
@@ -194,12 +194,12 @@ dep 'host provisioned', :host, :host_name, :ref, :env, :app_name, :app_user, :do
 
     as(app_user) {
       # Now that the code is in place, provision the app.
-      remote_babushka "conversation:app provisioned", :env => env, :host => host, :domain => domain, :app_name => app_name, :app_user => app_user, :app_root => app_root, :key => keys
+      remote_babushka "mtcmorris:app provisioned", :env => env, :host => host, :domain => domain, :app_name => app_name, :app_user => app_user, :app_root => app_root, :key => keys
     }
 
     as('root') {
       # Lastly, revoke sudo to lock the box down per-user.
-      remote_babushka "conversation:passwordless sudo removed"
+      remote_babushka "mtcmorris:passwordless sudo removed"
     }
 
     @run = true
