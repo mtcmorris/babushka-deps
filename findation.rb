@@ -14,10 +14,8 @@ dep 'findation app', :env, :host, :domain, :app_user, :app_root, :key do
   end
 
   requires [
-    'ssl cert in place'.with(:domain => domain, :env => env)
-  ]
+    'ssl cert in place'.with(:domain => domain, :env => env),
 
-  requires [
     'db'.with(
       :env => env,
       :username => app_user,
