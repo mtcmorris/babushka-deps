@@ -1,3 +1,7 @@
+dep 'findation system', :app_user, :key, :env
+
+dep 'findation env vars set', :domain
+
 dep 'findation packages' do
   requires [
     'postgres'.with('9.2'),
