@@ -6,17 +6,23 @@ upstream <%= upstream_name %> {
 
 # Canonical www. redirect
 server {
-  listen <%= listen_host %>:<%= listen_port %>;
-  server_name <%= domain %>;
+  listen 80;
+  server_name findation.com;
   return 301 http://www.<%= domain %>$request_uri;
 }
 
 server {
-  charset utf-8;
-  server_name <%= domain %>;
+  listen 443;
+  server_name findation.com;
+  return 301 https://www.<%= domain %>$request_uri;
+}
 
-  listen <%= listen_host %>:<%= listen_port %>;
-  listen <%= listen_host %>:443 ssl;
+server {
+  charset utf-8;
+  server_name www.findation.com;
+
+  listen 80;
+  listen 443 ssl;
 
   ssl_certificate      certs/<%= domain %>.crt;
   ssl_certificate_key  certs/<%= domain %>.key;
