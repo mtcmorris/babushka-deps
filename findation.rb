@@ -16,10 +16,11 @@ dep 'findation app', :env, :host, :domain, :app_user, :app_root, :key do
   def db_name
     YAML.load_file(app_root / 'config/database.yml')[env.to_s]['database']
   end
+  if env == 'production'
+    requires 'ssl cert in place'.with(:domain => domain, :env => env)
+  end
 
   requires [
-    'ssl cert in place'.with(:domain => domain, :env => env),
-
     'db'.with(
       :env => env,
       :username => app_user,
