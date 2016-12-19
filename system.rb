@@ -63,21 +63,6 @@ dep 'utc' do
   }
 end
 
-dep 'admins can sudo' do
-  requires 'admin group'
-  met? {
-    !'/etc/sudoers'.p.read.split("\n").grep(/^%admin\b/).empty?
-  }
-  meet {
-    '/etc/sudoers'.p.append("%admin  ALL=(ALL) ALL\n")
-  }
-end
-
-dep 'admin group' do
-  met? { '/etc/group'.p.grep(/^admin\:/) }
-  meet { sudo 'groupadd admin' }
-end
-
 dep 'tmp cleaning grace period', :for => :ubuntu do
   met? {
     "/etc/default/rcS".p.grep(/^[^#]*TMPTIME=0/).nil?
