@@ -44,24 +44,6 @@ dep 'vhost configured.nginx', :app_name, :env, :domain, :path, :listen_host, :li
   proxy_host.default('localhost')
   proxy_port.default('8000')
 
-  # TODO: Only required until we move to a single-IP nginx config.
-  def listen_host_au
-    {
-      # .com IP => .edu.au IP
-      '74.50.56.43' => '74.50.56.70',
-      '151.236.47.197' => '92.48.71.35'
-    }[listen_host.to_s]
-  end
-  def listen_host_uk
-    {
-      # .com IP => .edu.au IP
-      '74.50.56.43' => '74.50.56.70',
-      '151.236.47.197' => '92.48.71.35'
-    }[listen_host.to_s]
-  end
-  def domain_au; 'theconversation.edu.au' end
-  def domain_uk; 'theconversation.org.uk' end
-
   def up_to_date? source_name, dest
     source = dependency.load_path.parent / source_name
     if !source.p.exists?
@@ -103,7 +85,7 @@ dep 'running.nginx', :nginx_prefix do
     }
   }
   meet {
-    shell 'initctl start nginx'
+    shell 'systemctl start nginx'
   }
 end
 
@@ -114,7 +96,7 @@ dep 'startup script.nginx', :nginx_prefix do
       Babushka::Renderable.new("/etc/init/nginx.conf").clean?
   }
   meet {
-    render_erb 'nginx/nginx.init.conf.erb', :to => '/etc/init/nginx.conf'
+    render_erb 'nginx/nginx.service.erb', :to => '/lib/systemd/system/nginx.service'
   }
 end
 
