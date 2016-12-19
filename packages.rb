@@ -11,7 +11,7 @@ dep 'aspell dictionary.lib' do
 end
 
 dep 'bundler.gem' do
-  provides 'bundle'
+  provides []
 end
 
 dep 'nodejs.bin', :version do
