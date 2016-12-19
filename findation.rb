@@ -4,7 +4,7 @@ dep 'findation env vars set', :domain
 
 dep 'findation packages' do
   requires [
-    'postgres'.with('9.2'),
+    'postgres'.with('9.6'),
     'running.postfix',
     'running.nginx',
     'memcached',
