@@ -15,7 +15,7 @@ dep 'bundler.gem' do
 end
 
 dep 'nodejs.bin', :version do
-  version.default('0.10.28')
+  version.default('4.2.6')
   requires_when_unmet {
     on :apt, 'keyed apt source'.with(
       :uri => 'http://ppa.launchpad.net/chris-lea/node.js/ubuntu',
