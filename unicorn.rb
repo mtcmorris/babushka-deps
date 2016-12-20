@@ -1,10 +1,10 @@
-dep 'unicorn upstart config', :env, :user do
+dep 'unicorn systemd config', :env, :user do
   def app_root
     "/srv/http/#{user}/current"
   end
 
   def template_path
-    dependency.load_path.parent / 'unicorn/unicorn.init.erb'
+    dependency.load_path.parent / 'unicorn/unicorn.service.erb'
   end
 
   def service_name
@@ -12,14 +12,14 @@ dep 'unicorn upstart config', :env, :user do
   end
 
   def conf_dest
-    "/etc/init/#{service_name}.conf"
+    "/lib/systemd/system/#{service_name}.service"
   end
 
   def config_current?
     if Babushka::Renderable.new(conf_dest).from?(template_path)
       true
     else
-      log "upstart config needs updating"
+      log "systemd config needs updating"
       false
     end
   end
@@ -47,7 +47,7 @@ dep 'unicorn upstart config', :env, :user do
   }
   meet {
     render_erb template_path, :to => conf_dest, :sudo => true
-    sudo "initctl start #{service_name}; true"
+    sudo "systemctl start #{service_name}; true"
     sleep 10
   }
 end

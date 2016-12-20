@@ -1,0 +1,16 @@
+[Unit]
+Description=<%=user%> unicorns
+
+[Service]
+User=<%=user%>
+WorkingDirectory=<%=app_root%>
+Environment=RAILS_ENV=<%=env%>
+SyslogIdentifier=<%=user%>-unicorn
+PIDFile=<%=app_root%>/tmp/pids/unicorn.pid
+
+ExecStart=/usr/local/bin/bundle exec unicorn -c config/unicorn.rb -E <%=env%>
+ExecReload=/bin/kill -s USR2 $MAINPID
+ExecStop=/bin/kill -s QUIT $MAINPID
+
+[Install]
+WantedBy=multi-user.target
