@@ -25,7 +25,7 @@ dep 'unicorn systemd config', :env, :user do
   end
 
   def running?
-    running_count = shell('lsof -U').split("\n").grep(/#{Regexp.escape(app_root / 'tmp/sockets/unicorn.socket')}$/).count
+    running_count = shell('lsof -U').split("\n").grep(/#{Regexp.escape(app_root / 'tmp/sockets/unicorn.socket')}/).count
     (running_count >= 3).tap {|result| # 1 master + 2 workers
       if result
         log_ok "This app has #{running_count} unicorn#{'s' unless running_count == 1} running (1 master + #{running_count - 1} workers)."
