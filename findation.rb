@@ -46,6 +46,6 @@ dep 'findation common packages' do
     'postgres.bin',
     'libxml.lib', # for nokogiri
     'libxslt.lib', # for nokogiri
-    'coffeescript.src' # for barista
+    'coffeescript.bin' # for barista
   ]
 end
