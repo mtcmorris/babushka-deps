@@ -26,9 +26,19 @@ server {
 
   root <%= path / 'public' %>;
 
-  location ~ ^/(assets|javascripts)/ {
+  location ~ ^/assets/ {
     expires max;
     gzip_static on;
+    add_header Cache-Control public;
+    add_header Last-Modified "";
+    add_header ETag "";
+    break;
+  }
+
+  location ~ ^/javascripts/ {
+    expires max;
+    gzip on;
+    gzip_types application/javascript application/x-javascript text/javascript;
     add_header Cache-Control public;
     add_header Last-Modified "";
     add_header ETag "";
